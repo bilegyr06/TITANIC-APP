@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic Survival Predictor</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+        }
+        button {
+            grid-column: 1 / -1;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover {
+            background: var(--primary-dark);
+        }
+        .result {
+            text-align: center;
+            padding: 24px;
+            border-radius: var(--radius);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .survived {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        .not-survived {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Titanic Survival Predictor</h1>
+        <p class="subtitle">
+            A Random Forest model predicting passenger survival based on key features (CSC415 Machine Learning Project)
+        </p>
+
+        <div class="card">
+            <form method="post" action="/predict">
+                <div>
+                    <label for="Pclass">Passenger Class (1 = 1st, 2 = 2nd, 3 = 3rd)</label>
+                    <input type="number" name="Pclass" id="Pclass" min="1" max="3" required>
+                </div>
+                <div>
+                    <label for="Sex">Sex (0 = Male, 1 = Female)</label>
+                    <input type="number" name="Sex" id="Sex" min="0" max="1" required>
+                </div>
+                <div>
+                    <label for="Age">Age (years)</label>
+                    <input type="number" step="any" name="Age" id="Age" min="0" required>
+                </div>
+                <div>
+                    <label for="SibSp">Number of Siblings/Spouses Aboard</label>
+                    <input type="number" name="SibSp" id="SibSp" min="0" required>
+                </div>
+                <div>
+                    <label for="Parch">Number of Parents/Children Aboard</label>
+                    <input type="number" name="Parch" id="Parch" min="0" required>
+                </div>
+                <div>
+                    <label for="Fare">Passenger Fare</label>
+                    <input type="number" step="any" name="Fare" id="Fare" min="0" required>
+                </div>
+                <button type="submit">Predict Survival</button>
+            </form>
+        </div>
+
+        {% if prediction_text %}
+        <div class="card result 
+            {% if 'Survived' in prediction_text %}survived{% elif 'Error' in prediction_text %}error{% else %}not-survived{% endif %}">
+            <p>{{ prediction_text }}</p>
+        </div>
+        {% endif %}
+
+        <footer>
+            Built with FastAPI • Scikit-learn (Random Forest) • Covenant University CSC415 Alpha Semester 2025/2026
+        </footer>
+    </div>
+</body>
+</html>
