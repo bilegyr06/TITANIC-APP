@@ -1,14 +1,15 @@
 import pickle
 import numpy as np
+import pandas as pd   # Added for DataFrame input (fixes warning)
 import os
 
 from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse 
+from fastapi.responses import HTMLResponse, RedirectResponse
 
 app = FastAPI(title="Titanic Survival Predictor")
 
-# Templates (place your index.html in a 'templates' folder)
+# Templates
 templates = Jinja2Templates(directory="templates")
 
 # =====================
@@ -26,8 +27,8 @@ else:
 # =====================
 # ROUTES
 # =====================
-@app.get("") 
-async def redirect_root(): 
+@app.get("")
+async def redirect_root():
     return RedirectResponse(url="/")
 
 @app.get("/", response_class=HTMLResponse)
@@ -53,14 +54,22 @@ async def predict(request: Request,
         )
     
     try:
-        # Create feature array
-        features = np.array([[Pclass, Sex, Age, SibSp, Parch, Fare]])
+        # Create DataFrame with exact feature names (eliminates warning)
+        input_df = pd.DataFrame([{
+            'Pclass': Pclass,
+            'Sex': Sex,
+            'Age': Age,
+            'SibSp': SibSp,
+            'Parch': Parch,
+            'Fare': Fare
+        }])
         
-        # Predict
-        prediction = model.predict(features)[0]
+        # Predict class and probability
+        prediction = model.predict(input_df)[0]
+        survival_prob = model.predict_proba(input_df)[0][1] * 100  # % chance of Survived (class 1)
+        
         output = 'Survived' if prediction == 1 else 'Did Not Survive'
-        
-        prediction_text = f"Prediction: The passenger likely {output}"
+        prediction_text = f"Prediction: The passenger likely {output} ({survival_prob:.1f}% confidence)"
         
     except Exception as e:
         prediction_text = f"Error during prediction: {str(e)}"
