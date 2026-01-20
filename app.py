@@ -15,7 +15,7 @@ templates = Jinja2Templates(directory="templates")
 # =====================
 # LOAD MODEL
 # =====================
-MODEL_FILENAME = 'titanicmodel.pkl'
+MODEL_FILENAME = './model/titanic_survival_model.pkl'
 model = None
 
 if os.path.exists(MODEL_FILENAME):

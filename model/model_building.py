@@ -38,8 +38,8 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Test Accuracy: {accuracy:.4f}")
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
 
-# 6. Save the model as 'titanicmodel.pkl'
-with open('titanicmodel.pkl', 'wb') as f:
+# 6. Save the model as 'titanic_survival_model.pkl'
+with open('./model/titanic_survival_model.pkl', 'wb') as f:
     pickle.dump(model, f)
 
-print("Success: Model trained and saved as 'titanicmodel.pkl'")
+print("Success: Model trained and saved as 'titanic_survival_model.pkl'")
