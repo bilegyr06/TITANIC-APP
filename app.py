@@ -27,10 +27,6 @@ else:
 # =====================
 # ROUTES
 # =====================
-@app.get("")
-async def redirect_root():
-    return RedirectResponse(url="/")
-
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(
