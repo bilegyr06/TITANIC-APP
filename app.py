@@ -5,7 +5,7 @@ import os
 
 from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="Titanic Survival Predictor")
 
